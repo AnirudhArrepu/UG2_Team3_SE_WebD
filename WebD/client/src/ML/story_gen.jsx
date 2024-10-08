@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import './story_gen.css'; // Importing the CSS file
 import { GoogleGenerativeAI } from "@google/generative-ai"; //for getting the story, calling gemini api
+import Chat from '../components/chat/chat';
 
 const StoryGen = () => {
   const [isBoxVisible, setIsBoxVisible] = useState(false);
   const [boxHeading, setBoxHeading] = useState(''); // State to manage the heading of the box
   const [storyData, setStoryData] = useState('')
+
+  const toggleChat = () => {
+    setIsChatOpen(prevState => !prevState);
+  };
+
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Function to handle when any button is clicked
   const handleButtonClick = (heading) => {
@@ -76,10 +83,12 @@ const StoryGen = () => {
         </div>
       )}
 
-      {/* Chat Bot Button */}
-      <a href="https://example.com/chat-bot" target="_blank" rel="noopener noreferrer">
-        <button className="chat-bot">Chat Bot</button>
-      </a>
+      <div className='chat'>
+        <button className="chatbot" onClick={toggleChat}>
+        ChatBot
+        </button>
+        {isChatOpen && <Chat toggleChat={toggleChat} />}
+      </div>
     </div>
   );
 }
