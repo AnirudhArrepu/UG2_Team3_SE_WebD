@@ -17,6 +17,7 @@ import coralImg from '../assets/Coral_Image.jpg';
 import marine from '../assets/MarineBiodiveristy.jpg'
 import ocean from '../assets/Proj_Image1.jpg'
 import './style.css';
+import Fish from '../components/Fish/fish.jsx';
 
 function Home() {
     const images = [
@@ -257,6 +258,7 @@ We believe that even the smallest actions can have a profound effect on our envi
                     <p>Also please read the blogs written by other marine enthuaists and participate in forums. Share valuable information to help the marine industry by writing blogging or uploapding datasets or files, research papers or your findings.</p>
                 </div>
             </div>
+            <Fish/>
             <div className='chat'>
                 <button className="chatbot" onClick={toggleChat}>
                 🤖ChatBot
