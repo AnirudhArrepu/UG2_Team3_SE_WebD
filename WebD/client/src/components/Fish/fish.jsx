@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Fish.css";
+import "./fish.css";
 
 const Fish = () => {
   const [eyePosition, setEyePosition] = useState({ x: 0, y: 0 });
