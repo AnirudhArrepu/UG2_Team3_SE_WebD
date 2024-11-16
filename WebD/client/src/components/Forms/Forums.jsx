@@ -28,7 +28,15 @@ const Forum = () => {
     console.log("Username in Forums page:", username)
 
     useEffect(() => {
-        setTopic('About sea life of Andaman and Nicobar, do the sea monsters exist there...?');
+        const genAI = new GoogleGenerativeAI('AIzaSyB060WZBPz_EswunsAdpVwQxRAI4-5wf_4');
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const prompt = `Give me a topic for users to discuss upon, the topic should be related to marine life`;
+
+        const result = await model.generateContent(prompt);
+        
+        const topic = result.response.text();
+        setTopic(topic);
         fetchDiscussion(selectedDate);
     }, [selectedDate]);
 
