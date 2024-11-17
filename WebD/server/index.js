@@ -4,53 +4,54 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import { UserRouter } from './routes/user.js';
-import { FishRouter  } from './routes/marinedata.js'; 
+import { FishRouter } from './routes/marinedata.js';
 import { ForumsRouter } from './routes/forums.js';
 import { BlogsRouter } from './routes/blogs.js';
 import { DatasetRouter } from './routes/dataset.js';
 import cookieParser from 'cookie-parser';
 import http from 'http';
+import https from 'https';
 
-
-const app = express();  
+// Initialize Express app
+const app = express();
 
 app.use(express.json());
-
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ["https://jalajeevanakeerthi.vercel.app", "https://03d9-34-106-136-173.ngrok-free.app"],
     credentials: true,
-    methods: ['GET', 'POST', 'OPTIONS'], 
+    methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-
-
 app.use(cookieParser());
 
+// API Routes
 app.use('/auth', UserRouter);
-app.use('/data',FishRouter);
+app.use('/data', FishRouter);
 app.use('/api', ForumsRouter);
 app.use('/blogs', BlogsRouter);
 app.use('/datasets', DatasetRouter);
 
+// Connect to MongoDB
 mongoose.connect('mongodb+srv://jjkweb:ug2team3@cluster0.b3naz.mongodb.net/authtication')
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
-//
 
-
-//socket server to handle chat communication
+// Create HTTP server
 const server = createServer(app);
 
+// Set up Socket.io
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: ["https://jalajeevanakeerthi.vercel.app", "https://03d9-34-106-136-173.ngrok-free.app"],
         methods: ["GET", "POST"],
-        credentials: true
+        credentials: true,
     },
 });
 
+// Room data
 let rooms = {};
 
+// Handle socket connections
 io.on('connection', (socket) => {
     console.log(`User connected with socket id: ${socket.id}`);
 
@@ -69,13 +70,14 @@ io.on('connection', (socket) => {
         console.log(msg);
         rooms[room].push(msg);
 
+        // Make a request to the Flask server
         const postData = JSON.stringify({
             query: msg.msg
         });
 
         const options = {
-            hostname: '127.0.0.1',
-            port: 5000,
+            hostname: '6a1b-34-106-136-173.ngrok-free.app',  // Replace with your Flask server hostname
+            port: 443,             // Replace with your Flask server port
             path: '/query',
             method: 'POST',
             headers: {
@@ -84,7 +86,7 @@ io.on('connection', (socket) => {
             }
         };
 
-        const req = http.request(options, (res) => {
+        const req = https.request(options, (res) => {
             let data = '';
 
             res.on('data', (chunk) => {
@@ -92,28 +94,30 @@ io.on('connection', (socket) => {
             });
 
             res.on('end', () => {
-                console.log(data); 
+                console.log(data);
 
                 try {
                     const response = JSON.parse(data);
                     const reply = response.answer;
                     let botResponse = {
-                        msg: response.answer,
+                        msg: reply,
                         time: new Date().toLocaleTimeString(),
                         user: false
                     };
 
                     rooms[room].push(botResponse);
+                    console.log(botResponse)
                     io.to(room).emit('chat_update', rooms[room]);
 
                 } catch (error) {
                     console.error(error);
                     let errorResponse = {
-                        msg: "Server error, please wait util the server is back online!",
+                        msg: "Server error, please wait until the server is back online!",
                         time: new Date().toLocaleTimeString(),
                         user: false
                     };
                     rooms[room].push(errorResponse);
+                    print(rooms[room])
                     io.to(room).emit('chat_update', rooms[room]);
                 }
             });
@@ -139,6 +143,7 @@ io.on('connection', (socket) => {
     });
 });
 
+// Start the server
 server.listen(3001, () => {
     console.log('Server running on port 3001');
 });

@@ -83,7 +83,7 @@ router.post("/forgot-password", async (req, res) => {
       from: "your_email@gmail.com",
       to: email,
       subject: "Reset Password",
-      text: `http://localhost:5173/resetPassword/${token}`,
+      text: `https://jalajeevanakeerthi.vercel.app/resetPassword/${token}`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
