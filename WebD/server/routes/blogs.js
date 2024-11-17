@@ -29,13 +29,13 @@ router.post("/newblog", async (req, res)=>{
         newdata: content,
     });
     
-    if (flaskResponse.data) {
-        return res.json({ status: "true", message: "Blog added and sent to knowledge base" });
-    } else {
-        return res.status(500).json({ status: "false", message: "Blog added but failed to update knowledge base" });
-    }
+    // if (flaskResponse.data) {
+    //     return res.json({ status: "true", message: "Blog added and sent to knowledge base" });
+    // } else {
+    //     return res.status(500).json({ status: "false", message: "Blog added but failed to update knowledge base" });
+    // }
 
-    // return res.json({ status: "true", message: "Blog added" });
+    return res.json({ status: "true", message: "Blog added" });
     
 })
 
