@@ -83,7 +83,7 @@ router.post("/forgot-password", async (req, res) => {
       from: "your_email@gmail.com",
       to: email,
       subject: "Reset Password",
-      text: `https://ug2-team3-se-webd-1.onrender.com/resetPassword/${token}`,
+      text: `https://jalajeevanakeerthi.vercel.app/resetPassword/${token}`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
