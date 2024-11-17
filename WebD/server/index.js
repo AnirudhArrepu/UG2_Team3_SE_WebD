@@ -74,6 +74,7 @@ io.on('connection', (socket) => {
         const postData = JSON.stringify({
             query: msg.msg
         });
+        //
 
         const options = {
             hostname: '6a1b-34-106-136-173.ngrok-free.app',  // Replace with your Flask server hostname
